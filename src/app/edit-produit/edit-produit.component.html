@@ -1,4 +1,8 @@
-<form class="formulaire m-4" [formGroup]="formulaire" (ngSubmit)="onAjoutProduit()">
+<form
+  class="formulaire m-4"
+  [formGroup]="formulaire"
+  (ngSubmit)="onAjoutProduit()"
+>
   <mat-form-field>
     <mat-label>Nom</mat-label>
     <input
@@ -37,5 +41,15 @@
     }
   </mat-form-field>
 
-  <button mat-raised-button color="primary">Ajouter le produit</button>
+  <div class="d-flex align-items-center mb-4">
+    <input #inputFile type="file" style="display: none" (change)="onSelectionFichier($event)"/>
+    <button mat-mini-fab color="primary" type="button" (click)="inputFile.click()">
+      <mat-icon>attach_file</mat-icon>
+    </button>
+    <span class="ms-2">{{ fichierSelectionne ? fichierSelectionne.name : "Aucun fichier selectionné"}}</span>
+  </div>
+
+  <button mat-raised-button color="primary">
+    {{ idProduit ? "Modifier le produit" : "Ajouter le produit" }}
+  </button>
 </form>

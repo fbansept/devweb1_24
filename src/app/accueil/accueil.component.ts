@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-accueil',
@@ -20,10 +20,22 @@ import { RouterLink } from '@angular/router';
 })
 export class AccueilComponent {
   http: HttpClient = inject(HttpClient);
+  route: ActivatedRoute = inject(ActivatedRoute);
+
   listeProduit: any = [];
 
   ngOnInit() {
-    this.raffraichirListeProduit()
+    this.route.params.subscribe((parametres) => {
+      if (parametres['recherche']) {
+        this.http
+          .get(
+            `http://localhost/backend_angular_devweb1_24/recherche-produit.php?recherche=${parametres['recherche']}`
+          )
+          .subscribe((listeProduit) => (this.listeProduit = listeProduit));
+      } else {
+        this.raffraichirListeProduit();
+      }
+    });
   }
 
   raffraichirListeProduit() {

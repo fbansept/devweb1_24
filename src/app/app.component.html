@@ -31,8 +31,10 @@
           >
         </li>
       </ul>
-      <form class="d-flex">
+      <form class="d-flex" (ngSubmit)="onRecherche()">
         <input
+          [(ngModel)]="texteRecherche"
+          [ngModelOptions]="{ standalone: true }"
           class="form-control me-2"
           type="search"
           placeholder="Search"

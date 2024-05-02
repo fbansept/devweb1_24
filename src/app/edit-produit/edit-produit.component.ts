@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -20,6 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatIconModule,
   ],
   templateUrl: './edit-produit.component.html',
   styleUrl: './edit-produit.component.scss',
@@ -56,15 +58,29 @@ export class EditProduitComponent {
     prix: [1, [Validators.required, Validators.min(0.01)]],
   });
 
+  fichierSelectionne: File | null = null;
+
   onAjoutProduit() {
+    const data = new FormData();
+
+    data.append('produit', JSON.stringify(this.formulaire.value));
+
+    if (this.fichierSelectionne) {
+      data.append('image', this.fichierSelectionne);
+    }
+
     if (this.formulaire.valid) {
       const url: string = this.idProduit
         ? `http://localhost/backend_angular_devweb1_24/modifier-produit.php?id=${this.idProduit}`
         : 'http://localhost/backend_angular_devweb1_24/ajout-produit.php';
 
       this.http
-        .post(url, this.formulaire.value)
+        .post(url, data)
         .subscribe((resultat) => this.router.navigateByUrl('/accueil'));
     }
+  }
+
+  onSelectionFichier(evenement: any) {
+    this.fichierSelectionne = evenement.target.files[0];
   }
 }

@@ -5,7 +5,10 @@ import { Page404Component } from './page404/page404.component';
 import { EditProduitComponent } from './edit-produit/edit-produit.component';
 
 export const routes: Routes = [
+
+  { path: 'accueil/:recherche', component: AccueilComponent },
   { path: 'accueil', component: AccueilComponent },
+
   { path: 'connexion', component: ConnexionComponent },
 
   { path: 'ajout-produit', component: EditProduitComponent },
