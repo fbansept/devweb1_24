@@ -9,6 +9,7 @@ export const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
 
   { path: 'ajout-produit', component: EditProduitComponent },
+  { path: 'modifier-produit/:id', component: EditProduitComponent },
 
   { path: '', redirectTo: 'accueil', pathMatch: 'full' },
   { path: '**', component: Page404Component },

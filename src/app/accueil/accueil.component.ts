@@ -23,6 +23,10 @@ export class AccueilComponent {
   listeProduit: any = [];
 
   ngOnInit() {
+    this.raffraichirListeProduit()
+  }
+
+  raffraichirListeProduit() {
     this.http
       .get('http://localhost/backend_angular_devweb1_24/liste-produit.php')
       .subscribe((listeProduit) => (this.listeProduit = listeProduit));
@@ -34,6 +38,6 @@ export class AccueilComponent {
         //'http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=' + idProduit
         `http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=${idProduit}`
       )
-      .subscribe((resultat) => console.log(resultat));
+      .subscribe((resultat) => this.raffraichirListeProduit());
   }
 }

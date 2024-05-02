@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-produit',
@@ -26,6 +27,25 @@ import { MatInputModule } from '@angular/material/input';
 export class EditProduitComponent {
   formBuilder: FormBuilder = inject(FormBuilder);
   http: HttpClient = inject(HttpClient);
+  router: Router = inject(Router);
+  route: ActivatedRoute = inject(ActivatedRoute);
+
+  idProduit: number | null = null;
+
+  ngOnInit() {
+    this.route.params.subscribe((parametres) => {
+      //si un id existe dans l'URL et que c'est un nombre
+      if (parametres['id'] != null && !isNaN(parametres['id'])) {
+        this.idProduit = parametres['id'];
+
+        this.http
+          .get(
+            `http://localhost/backend_angular_devweb1_24/produit.php?id=${this.idProduit}`
+          )
+          .subscribe((produit) => this.formulaire.patchValue(produit));
+      }
+    });
+  }
 
   formulaire: FormGroup = this.formBuilder.group({
     nom: [
@@ -38,12 +58,13 @@ export class EditProduitComponent {
 
   onAjoutProduit() {
     if (this.formulaire.valid) {
+      const url: string = this.idProduit
+        ? `http://localhost/backend_angular_devweb1_24/modifier-produit.php?id=${this.idProduit}`
+        : 'http://localhost/backend_angular_devweb1_24/ajout-produit.php';
+
       this.http
-        .post(
-          'http://localhost/backend_angular_devweb1_24/ajout-produit.php',
-          this.formulaire.value
-        )
-        .subscribe((resultat) => console.log(resultat));
+        .post(url, this.formulaire.value)
+        .subscribe((resultat) => this.router.navigateByUrl('/accueil'));
     }
   }
 }
