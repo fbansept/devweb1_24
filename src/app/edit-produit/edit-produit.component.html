@@ -43,9 +43,21 @@
 
   <div class="d-flex align-items-center mb-4">
     <input #inputFile type="file" style="display: none" (change)="onSelectionFichier($event)"/>
+
+    @if(imageExistanteBdd != null && imageExistanteBdd != '' && !suppressionImageExistanteBdd) {
+
+      <img src="http://localhost/backend_angular_devweb1_24/uploads/{{ imageExistanteBdd }}"
+          style="object-fit: cover; height: 80px">
+
+      <button mat-mini-fab color="warn" type="button" (click)="onSuppressionImage()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    }
+
     <button mat-mini-fab color="primary" type="button" (click)="inputFile.click()">
       <mat-icon>attach_file</mat-icon>
     </button>
+
     <span class="ms-2">{{ fichierSelectionne ? fichierSelectionne.name : "Aucun fichier selectionné"}}</span>
   </div>
 
