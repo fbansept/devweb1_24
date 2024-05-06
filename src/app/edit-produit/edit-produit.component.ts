@@ -33,8 +33,10 @@ export class EditProduitComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
 
   idProduit: number | null = null;
-  imageExistanteBdd: string | null = null;
   suppressionImageExistanteBdd: boolean = false;
+
+  imageExistanteBdd: string | null = null; //url de l'image en base de donnée
+  miniature: string | null = null; //url de l'image locale
 
   ngOnInit() {
     this.route.params.subscribe((parametres) => {
@@ -66,31 +68,47 @@ export class EditProduitComponent {
   fichierSelectionne: File | null = null;
 
   onAjoutProduit() {
-    const data = new FormData();
+    //si l'utiisateur est connecté
+    const jwt = localStorage.getItem('jwt');
 
-    data.append('produit', JSON.stringify(this.formulaire.value));
+    if (jwt != null) {
+      const data = new FormData();
 
-    if (this.suppressionImageExistanteBdd) {
-      data.append('supprimer_image', 'true');
-    }
+      data.append('produit', JSON.stringify(this.formulaire.value));
 
-    if (this.fichierSelectionne) {
-      data.append('image', this.fichierSelectionne);
-    }
+      if (this.suppressionImageExistanteBdd) {
+        data.append('supprimer_image', 'true');
+      }
 
-    if (this.formulaire.valid) {
-      const url: string = this.idProduit
-        ? `http://localhost/backend_angular_devweb1_24/modifier-produit.php?id=${this.idProduit}`
-        : 'http://localhost/backend_angular_devweb1_24/ajout-produit.php';
+      if (this.fichierSelectionne) {
+        data.append('image', this.fichierSelectionne);
+      }
 
-      this.http
-        .post(url, data)
-        .subscribe((resultat) => this.router.navigateByUrl('/accueil'));
+      if (this.formulaire.valid) {
+        const url: string = this.idProduit
+          ? `http://localhost/backend_angular_devweb1_24/modifier-produit.php?id=${this.idProduit}`
+          : 'http://localhost/backend_angular_devweb1_24/ajout-produit.php';
+
+        this.http
+          .post(url, data, {
+            headers: { Authorization: jwt },
+          })
+          .subscribe((resultat) => this.router.navigateByUrl('/accueil'));
+      }
     }
   }
 
   onSelectionFichier(evenement: any) {
     this.fichierSelectionne = evenement.target.files[0];
+
+    if (this.fichierSelectionne) {
+      let reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.miniature = e.target.result;
+      };
+      reader.readAsDataURL(this.fichierSelectionne);
+    }
 
     // //si on change d'image et qu'il en existe une dans la bdd, on demande sa suppression.
     // if (this.imageExistanteBdd != null && this.imageExistanteBdd != '') {
@@ -100,5 +118,7 @@ export class EditProduitComponent {
 
   onSuppressionImage() {
     this.suppressionImageExistanteBdd = true;
+    this.miniature = null;
+    this.fichierSelectionne = null;
   }
 }
