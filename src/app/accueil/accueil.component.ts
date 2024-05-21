@@ -52,10 +52,7 @@ export class AccueilComponent {
       this.http
         .delete(
           //'http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=' + idProduit
-          `http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=${idProduit}`,
-          {
-            headers: { Authorization: jwt },
-          }
+          `http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=${idProduit}` 
         )
         .subscribe((resultat) => this.raffraichirListeProduit());
     }
