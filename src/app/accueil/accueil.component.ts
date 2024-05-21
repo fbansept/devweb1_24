@@ -45,11 +45,19 @@ export class AccueilComponent {
   }
 
   onClickSupprime(idProduit: number) {
-    this.http
-      .delete(
-        //'http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=' + idProduit
-        `http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=${idProduit}`
-      )
-      .subscribe((resultat) => this.raffraichirListeProduit());
+
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt != null) {
+      this.http
+        .delete(
+          //'http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=' + idProduit
+          `http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=${idProduit}`,
+          {
+            headers: { Authorization: jwt },
+          }
+        )
+        .subscribe((resultat) => this.raffraichirListeProduit());
+    }
   }
 }
