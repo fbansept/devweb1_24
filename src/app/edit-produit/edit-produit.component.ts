@@ -10,6 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -67,6 +68,8 @@ export class EditProduitComponent {
 
   fichierSelectionne: File | null = null;
 
+  snackBar: MatSnackBar = inject(MatSnackBar);
+
   onAjoutProduit() {
     //si l'utiisateur est connecté
     const jwt = localStorage.getItem('jwt');
@@ -93,7 +96,19 @@ export class EditProduitComponent {
           .post(url, data, {
             headers: { Authorization: jwt },
           })
-          .subscribe((resultat) => this.router.navigateByUrl('/accueil'));
+          .subscribe((resultat) => {
+            this.snackBar.open(
+              this.idProduit
+                ? 'Le produit a été modifié'
+                : 'Le produit a été ajouté',
+              undefined,
+              {
+                panelClass: 'snack-bar-valid',
+                duration: 3000,
+              }
+            );
+            this.router.navigateByUrl('/accueil');
+          });
       }
     }
   }

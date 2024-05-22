@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
@@ -23,6 +24,8 @@ export class AccueilComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
 
   listeProduit: any = [];
+
+  snackBar: MatSnackBar = inject(MatSnackBar);
 
   ngOnInit() {
     this.route.params.subscribe((parametres) => {
@@ -45,16 +48,24 @@ export class AccueilComponent {
   }
 
   onClickSupprime(idProduit: number) {
-
     const jwt = localStorage.getItem('jwt');
 
     if (jwt != null) {
       this.http
         .delete(
           //'http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=' + idProduit
-          `http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=${idProduit}` 
+          `http://localhost/backend_angular_devweb1_24/supprimer-produit.php?id=${idProduit}`,
+          {
+            headers: { Authorization: jwt },
+          }
         )
-        .subscribe((resultat) => this.raffraichirListeProduit());
+        .subscribe((resultat) => {
+          this.raffraichirListeProduit();
+          this.snackBar.open('Le produit a été supprimé', undefined, {
+            panelClass: 'snack-bar-valid',
+            duration: 3000,
+          });
+        });
     }
   }
 }
