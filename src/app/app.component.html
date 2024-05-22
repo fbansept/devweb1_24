@@ -22,6 +22,14 @@
             >Accueil</a
           >
         </li>
+
+        @if(authentification.connecte) {
+
+        <li class="nav-item" style="cursor: pointer; user-select: none">
+          <a class="nav-link" (click)="onDeconnexion()">Deconnexion</a>
+        </li>
+
+        } @else {
         <li class="nav-item">
           <a
             class="nav-link"
@@ -30,6 +38,15 @@
             >Connexion</a
           >
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/inscription"
+            routerLinkActive="page-actuelle"
+            >Inscription</a
+          >
+        </li>
+        }
       </ul>
       <form class="d-flex" (ngSubmit)="onRecherche()">
         <input
