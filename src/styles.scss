@@ -27,4 +27,10 @@ body {
     --mat-mdc-snack-bar-button-color: #fff;
     --mdc-snackbar-supporting-text-color: #fff;
   }
+
+  &.snack-bar-error {
+    --mdc-snackbar-container-color: rgb(159, 0, 0);
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
 }
