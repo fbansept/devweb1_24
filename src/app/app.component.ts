@@ -23,14 +23,17 @@ export class AppComponent {
   authentification: AuthentificationService = inject(AuthentificationService);
   snackBar: MatSnackBar = inject(MatSnackBar);
 
+  ngOnInit() {
+    this.authentification.getInfoFromJwtLocalStorage();
+  }
+
   onRecherche() {
     this.router.navigate(['/accueil', this.texteRecherche]);
   }
 
   onDeconnexion() {
-    localStorage.removeItem('jwt');
-
-    this.authentification.connecte = false;
+    
+    this.authentification.deconnexion();
 
     this.snackBar.open('Vous êtes deconnecté', undefined, {
       panelClass: 'snack-bar-valid',

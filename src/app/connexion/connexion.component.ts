@@ -46,9 +46,8 @@ export class ConnexionComponent {
           this.formulaire.value
         )
         .subscribe((resultat: any) => {
-          localStorage.setItem('jwt', resultat.jwt);
-
-          this.authentification.connecte = true;
+          
+          this.authentification.connexion(resultat.jwt);
 
           this.snackBar.open('Vous êtes connecté', undefined, {
             panelClass: 'snack-bar-valid',

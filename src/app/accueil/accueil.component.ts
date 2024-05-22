@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { AuthentificationService } from '../authentification.service';
 
 @Component({
   selector: 'app-accueil',
@@ -22,10 +23,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 export class AccueilComponent {
   http: HttpClient = inject(HttpClient);
   route: ActivatedRoute = inject(ActivatedRoute);
-
   listeProduit: any = [];
-
   snackBar: MatSnackBar = inject(MatSnackBar);
+  authentification: AuthentificationService = inject(AuthentificationService);
 
   ngOnInit() {
     this.route.params.subscribe((parametres) => {

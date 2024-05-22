@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthentificationService } from '../authentification.service';
 
 @Component({
   selector: 'app-edit-produit',
@@ -32,6 +33,7 @@ export class EditProduitComponent {
   http: HttpClient = inject(HttpClient);
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
+  authentification: AuthentificationService = inject(AuthentificationService);
 
   idProduit: number | null = null;
   suppressionImageExistanteBdd: boolean = false;
@@ -50,6 +52,19 @@ export class EditProduitComponent {
             `http://localhost/backend_angular_devweb1_24/produit.php?id=${this.idProduit}`
           )
           .subscribe((produit: any) => {
+
+            //si l'utilisateur n'est ni administrateur ou créateur du produit
+            //on le renvoit vers la page d'accueil
+            if (!this.authentification.isAdmin && produit.id_utilisateur != this.authentification.id) {
+
+              this.snackBar.open('Vous ne pouvez pas editer ce produit', undefined, {
+                panelClass: 'snack-bar-warning',
+                duration: 3000,
+              });
+
+              this.router.navigateByUrl("/accueil");
+            }
+
             this.formulaire.patchValue(produit);
             this.imageExistanteBdd = produit.image;
           });
